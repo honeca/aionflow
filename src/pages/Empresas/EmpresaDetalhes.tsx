@@ -117,7 +117,7 @@ const EmpresaDetalhes: React.FC = () => {
                 <DetailItem label="CNPJ" value={company.cnpj} />
                 <DetailItem label="Data de Abertura" value={company.data_abertura ? new Date(company.data_abertura).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : '–'} />
                 <DetailItem label="Regime Tributário" value={company.regime_tributario} />
-                <DetailItem label="Status" value={<Badge variant={company.status_empresa === 'Ativa' ? 'success' : 'neutral'}>{company.status_empresa}</Badge>} />
+                <DetailItem label="Status" value={<Badge variant={company.status === 'Ativa' ? 'success' : 'neutral'}>{company.status}</Badge>} />
                 <DetailItem label="Capital Social" value={company.capital_social?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
                 <DetailItem label="Inscrição Estadual" value={company.ie} />
                 <DetailItem label="Inscrição Municipal" value={company.im} />
@@ -288,7 +288,7 @@ const EmpresaDetalhes: React.FC = () => {
             <p className="text-gray-400 mt-1">{company.cnpj}</p>
           </div>
           <div className="flex items-center gap-4">
-            <Badge variant={company.status_empresa === 'Ativa' ? 'success' : 'neutral'}>{company.status_empresa}</Badge>
+            <Badge variant={company.status === 'Ativa' ? 'success' : 'neutral'}>{company.status}</Badge>
             <button 
               onClick={() => setIsEditModalOpen(true)}
               className="bg-gray-800/50 hover:bg-gray-700/50 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"

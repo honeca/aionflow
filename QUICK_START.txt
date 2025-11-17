@@ -1,0 +1,85 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                     AIONFLOW - QUICK START                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+⚡ CONFIGURAÇÃO RÁPIDA (15 MINUTOS)
+══════════════════════════════════════════════════════════════════
+
+1️⃣  SUPABASE (5 min)
+────────────────────────────────────────────────────────────────
+→ https://app.supabase.com
+→ Criar projeto novo
+→ Copiar: URL + chave anon
+
+2️⃣  ARQUIVO .ENV (2 min)
+────────────────────────────────────────────────────────────────
+$ cp .env.example .env
+$ nano .env
+
+Colar:
+  VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+  VITE_SUPABASE_ANON_KEY=sua-chave-aqui
+
+Salvar: Ctrl+O → Enter → Ctrl+X
+
+3️⃣  MIGRATIONS (5 min)
+────────────────────────────────────────────────────────────────
+Supabase → SQL Editor → New query
+
+Execute em ordem:
+  ✓ supabase/migrations/20251116170100_add_detailed_company_fields.sql
+  ✓ supabase/migrations/20251116170101_fix_im_column.sql
+
+4️⃣  INICIAR (1 min)
+────────────────────────────────────────────────────────────────
+$ ./iniciar.sh
+
+ou
+
+$ npm run dev
+
+5️⃣  ACESSAR
+────────────────────────────────────────────────────────────────
+http://localhost:5173
+
+══════════════════════════════════════════════════════════════════
+📋 COMANDOS ÚTEIS
+══════════════════════════════════════════════════════════════════
+
+Verificar configuração:
+$ ./verificar-config.sh
+
+Iniciar servidor:
+$ ./iniciar.sh
+$ npm run dev
+
+Build:
+$ npm run build
+
+Lint:
+$ npm run lint
+
+══════════════════════════════════════════════════════════════════
+🆘 PROBLEMAS COMUNS
+══════════════════════════════════════════════════════════════════
+
+Erro: "Supabase URL must be defined"
+→ Configure o arquivo .env
+
+Erro: "relation empresas does not exist"
+→ Execute as migrations no SQL Editor
+
+Porta em uso:
+$ lsof -ti:5173 | xargs kill -9
+
+══════════════════════════════════════════════════════════════════
+📚 DOCUMENTAÇÃO COMPLETA
+══════════════════════════════════════════════════════════════════
+
+COMO_CONFIGURAR.md  → Guia detalhado passo a passo
+SETUP.md            → Documentação técnica completa
+README.md           → Visão geral do projeto
+
+══════════════════════════════════════════════════════════════════
+
+Leia COMO_CONFIGURAR.md para instruções detalhadas!

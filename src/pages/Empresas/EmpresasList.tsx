@@ -25,7 +25,7 @@ const EmpresasList: React.FC = () => {
         company.cnpj?.replace(/[^\d]/g, '').includes(searchTerm.replace(/[^\d]/g, ''));
       
       const matchesRegime = regime === 'Todos' || company.regime_tributario === regime;
-      const matchesStatus = status === 'Todos' || company.status_empresa === status;
+      const matchesStatus = status === 'Todos' || company.status === status;
 
       return matchesSearch && matchesRegime && matchesStatus;
     });
@@ -82,7 +82,7 @@ const EmpresasList: React.FC = () => {
                 <td className="p-4 text-gray-300">{company.regime_tributario}</td>
                 <td className="p-4 text-gray-300">{company.responsavel_nome}</td>
                 <td className="p-4">
-                  <Badge variant={company.status_empresa === 'Ativa' ? 'success' : 'neutral'}>{company.status_empresa}</Badge>
+                  <Badge variant={company.status === 'Ativa' ? 'success' : 'neutral'}>{company.status}</Badge>
                 </td>
                 <td className="p-4">
                   <Link to={`/empresas/${company.id}`} className="text-blue-400 hover:text-blue-300 text-sm font-medium">

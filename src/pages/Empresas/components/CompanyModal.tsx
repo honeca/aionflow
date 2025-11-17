@@ -22,7 +22,7 @@ const getInitialFormData = (): FormData => ({
   nome_fantasia: '',
   cnpj: '',
   regime_tributario: 'Simples Nacional',
-  status: 'Ativa',
+  status_empresa: 'Ativa',
   data_abertura: '',
   ie: '', im: '', cnae: '',
   cep: '', logradouro: '', numero: '', complemento: '', bairro: '', cidade: '', uf: '',
@@ -82,7 +82,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({ isOpen, onClose, companyToE
             <div><label className={labelClasses}>CNPJ*</label><InputMask mask="cnpj" name="cnpj" value={formData.cnpj || ''} onChange={handleChange} className={inputClasses} required /></div>
             <div><label className={labelClasses}>Regime Tributário*</label><select name="regime_tributario" value={formData.regime_tributario || 'Simples Nacional'} onChange={handleChange} className={inputClasses}><option>Simples Nacional</option><option>Lucro Presumido</option><option>Lucro Real</option></select></div>
             <div><label className={labelClasses}>Data de Abertura</label><input type="date" name="data_abertura" value={formData.data_abertura || ''} onChange={handleChange} className={inputClasses} /></div>
-            <div><label className={labelClasses}>Status*</label><select name="status" value={formData.status || 'Ativa'} onChange={handleChange} className={inputClasses}><option>Ativa</option><option>Inativa</option><option>Suspensa</option></select></div>
+            <div><label className={labelClasses}>Status*</label><select name="status_empresa" value={formData.status_empresa || 'Ativa'} onChange={handleChange} className={inputClasses}><option>Ativa</option><option>Inativa</option><option>Suspensa</option></select></div>
             <div><label className={labelClasses}>Inscrição Estadual</label><input name="ie" value={formData.ie || ''} onChange={handleChange} className={inputClasses} /></div>
             <div><label className={labelClasses}>Inscrição Municipal</label><input name="im" value={formData.im || ''} onChange={handleChange} className={inputClasses} /></div>
             <div className="lg:col-span-1"><label className={labelClasses}>CNAE Principal</label><input name="cnae" value={formData.cnae || ''} onChange={handleChange} className={inputClasses} /></div>

@@ -124,7 +124,7 @@ export type Database = {
           responsavel_rg: string | null
           responsavel_telefone: string | null
           site: string | null
-          status: string
+          status_empresa: string
           telefone_principal: string | null
           uf: string | null
           updated_at: string
@@ -163,7 +163,7 @@ export type Database = {
           responsavel_rg?: string | null
           responsavel_telefone?: string | null
           site?: string | null
-          status?: string
+          status_empresa?: string
           telefone_principal?: string | null
           uf?: string | null
           updated_at?: string
@@ -202,7 +202,7 @@ export type Database = {
           responsavel_rg?: string | null
           responsavel_telefone?: string | null
           site?: string | null
-          status?: string
+          status_empresa?: string
           telefone_principal?: string | null
           uf?: string | null
           updated_at?: string

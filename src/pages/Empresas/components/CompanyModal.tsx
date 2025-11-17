@@ -22,12 +22,12 @@ const getInitialFormData = (): FormData => ({
   nome_fantasia: '',
   cnpj: '',
   regime_tributario: 'Simples Nacional',
-  status: 'Ativa',
+  status_empresa: 'Ativa',
   data_abertura: '',
   ie: '', im: '', cnae: '',
   cep: '', logradouro: '', numero: '', complemento: '', bairro: '', cidade: '', uf: '',
   email1: '', email2: '', email3: '',
-  telefone1: '', telefone2: '', telefone3: '',
+  telefone_principal: '',
   responsavel_nome: '', responsavel_cpf: '', responsavel_telefone: '', responsavel_email: '', responsavel_rg: '', responsavel_orgao_emissor: '', responsavel_data_emissao_rg: '', responsavel_funcao: '',
   capital_social: 0,
 });
@@ -82,7 +82,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({ isOpen, onClose, companyToE
             <div><label className={labelClasses}>CNPJ*</label><InputMask mask="cnpj" name="cnpj" value={formData.cnpj || ''} onChange={handleChange} className={inputClasses} required /></div>
             <div><label className={labelClasses}>Regime Tributário*</label><select name="regime_tributario" value={formData.regime_tributario || 'Simples Nacional'} onChange={handleChange} className={inputClasses}><option>Simples Nacional</option><option>Lucro Presumido</option><option>Lucro Real</option></select></div>
             <div><label className={labelClasses}>Data de Abertura</label><input type="date" name="data_abertura" value={formData.data_abertura || ''} onChange={handleChange} className={inputClasses} /></div>
-            <div><label className={labelClasses}>Status*</label><select name="status" value={formData.status || 'Ativa'} onChange={handleChange} className={inputClasses}><option>Ativa</option><option>Inativa</option><option>Suspensa</option></select></div>
+            <div><label className={labelClasses}>Status*</label><select name="status_empresa" value={formData.status_empresa || 'Ativa'} onChange={handleChange} className={inputClasses}><option>Ativa</option><option>Inativa</option><option>Suspensa</option></select></div>
             <div><label className={labelClasses}>Inscrição Estadual</label><input name="ie" value={formData.ie || ''} onChange={handleChange} className={inputClasses} /></div>
             <div><label className={labelClasses}>Inscrição Municipal</label><input name="im" value={formData.im || ''} onChange={handleChange} className={inputClasses} /></div>
             <div className="lg:col-span-1"><label className={labelClasses}>CNAE Principal</label><input name="cnae" value={formData.cnae || ''} onChange={handleChange} className={inputClasses} /></div>
@@ -104,9 +104,9 @@ const CompanyModal: React.FC<CompanyModalProps> = ({ isOpen, onClose, companyToE
             <div><label className={labelClasses}>E-mail 1*</label><input type="email" name="email1" value={formData.email1 || ''} onChange={handleChange} className={inputClasses} required/></div>
             <div><label className={labelClasses}>E-mail 2</label><input type="email" name="email2" value={formData.email2 || ''} onChange={handleChange} className={inputClasses} /></div>
             <div><label className={labelClasses}>E-mail 3</label><input type="email" name="email3" value={formData.email3 || ''} onChange={handleChange} className={inputClasses} /></div>
-            <div><label className={labelClasses}>Telefone 1*</label><InputMask mask="phone" name="telefone1" value={formData.telefone1 || ''} onChange={handleChange} className={inputClasses} required/></div>
-            <div><label className={labelClasses}>Telefone 2</label><InputMask mask="phone" name="telefone2" value={formData.telefone2 || ''} onChange={handleChange} className={inputClasses} /></div>
-            <div><label className={labelClasses}>Telefone 3</label><InputMask mask="phone" name="telefone3" value={formData.telefone3 || ''} onChange={handleChange} className={inputClasses} /></div>
+            <div><label className={labelClasses}>Telefone Principal*</label><InputMask mask="phone" name="telefone_principal" value={formData.telefone_principal || ''} onChange={handleChange} className={inputClasses} required/></div>
+            <div><label className={labelClasses}>WhatsApp 1</label><InputMask mask="phone" name="whatsapp1" value={formData.whatsapp1 || ''} onChange={handleChange} className={inputClasses} /></div>
+            <div><label className={labelClasses}>WhatsApp 2</label><InputMask mask="phone" name="whatsapp2" value={formData.whatsapp2 || ''} onChange={handleChange} className={inputClasses} /></div>
           </div>
         </section>
 
@@ -128,7 +128,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({ isOpen, onClose, companyToE
             <h4 className="font-semibold text-gray-200 mb-4 border-b border-gray-700 pb-2">Capital Social</h4>
             <div>
                 <label className={labelClasses}>Capital Social (R$)</label>
-                <input type="number" name="capital_social" value={formData.capital_social || ''} onChange={(e) => handleChange({ ...e, target: { ...e.target, value: parseFloat(e.target.value) || 0 }})} className={inputClasses} />
+                <input type="number" step="0.01" name="capital_social" value={formData.capital_social || 0} onChange={handleChange} className={inputClasses} />
                 <p className="text-xs text-gray-500 mt-1">O detalhamento por sócio será feito na aba "Sócios".</p>
             </div>
         </section>

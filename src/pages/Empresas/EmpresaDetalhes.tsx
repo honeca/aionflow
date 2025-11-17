@@ -117,7 +117,7 @@ const EmpresaDetalhes: React.FC = () => {
                 <DetailItem label="CNPJ" value={company.cnpj} />
                 <DetailItem label="Data de Abertura" value={company.data_abertura ? new Date(company.data_abertura).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : '–'} />
                 <DetailItem label="Regime Tributário" value={company.regime_tributario} />
-                <DetailItem label="Status" value={<Badge variant={company.status === 'Ativa' ? 'success' : 'neutral'}>{company.status}</Badge>} />
+                <DetailItem label="Status" value={<Badge variant={company.status_empresa === 'Ativa' ? 'success' : 'neutral'}>{company.status_empresa}</Badge>} />
                 <DetailItem label="Capital Social" value={company.capital_social?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
                 <DetailItem label="Inscrição Estadual" value={company.ie} />
                 <DetailItem label="Inscrição Municipal" value={company.im} />
@@ -132,9 +132,9 @@ const EmpresaDetalhes: React.FC = () => {
                   <DetailItem label="E-mail 1" value={company.email1} />
                   <DetailItem label="E-mail 2" value={company.email2} />
                   <DetailItem label="E-mail 3" value={company.email3} />
-                  <DetailItem label="Telefone 1" value={company.telefone1} />
-                  <DetailItem label="Telefone 2" value={company.telefone2} />
-                  <DetailItem label="Telefone 3" value={company.telefone3} />
+                  <DetailItem label="Telefone Principal" value={company.telefone_principal} />
+                  <DetailItem label="WhatsApp 1" value={company.whatsapp1} />
+                  <DetailItem label="WhatsApp 2" value={company.whatsapp2} />
                 </div>
               </DetailCard>
               <DetailCard title="Responsável Legal">
@@ -153,7 +153,7 @@ const EmpresaDetalhes: React.FC = () => {
           </div>
         );
       case 'Sócios':
-        const totalParticipacao = company.socios.reduce((acc, socio) => acc + (socio.participacao || 0), 0);
+        const totalParticipacao = company.socios.reduce((acc, socio) => acc + (socio.participacao_percentual || 0), 0);
         return (
           <DetailCard title="Quadro Societário">
             <div className="flex flex-wrap justify-between items-baseline mb-4 gap-4">
@@ -187,7 +187,7 @@ const EmpresaDetalhes: React.FC = () => {
                       <td className="p-3 text-sm text-white">{socio.nome}</td>
                       <td className="p-3 text-sm text-gray-300">{socio.cpf}</td>
                       <td className="p-3 text-sm text-gray-300">{socio.data_entrada ? new Date(socio.data_entrada).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : '–'}</td>
-                      <td className="p-3 text-sm text-gray-300">{socio.participacao?.toFixed(2)}%</td>
+                      <td className="p-3 text-sm text-gray-300">{socio.participacao_percentual?.toFixed(2)}%</td>
                       <td className="p-3 text-sm text-gray-300">{socio.valor_integralizado?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                       <td className="p-3"><Badge variant={socio.status === 'Ativo' ? 'success' : 'neutral'}>{socio.status}</Badge></td>
                       <td className="p-3 text-right">
@@ -209,7 +209,7 @@ const EmpresaDetalhes: React.FC = () => {
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {(['ECNPJ', 'ECPF'] as const).map(tipo => {
-              const certificado = company.certificados.find(c => c.tipo === tipo);
+              const certificado = company.certificados.find(c => c.tipo_certificado === tipo);
               const statusInfo = getCertificateStatus(certificado);
               const daysRemaining = getDaysRemaining(certificado?.data_validade);
 
@@ -269,7 +269,7 @@ const EmpresaDetalhes: React.FC = () => {
             onClose={handleCloseCertModal}
             companyId={company.id}
             certificateType={certModalState.tipo}
-            currentCert={company.certificados.find(c => c.tipo === certModalState.tipo)}
+            currentCert={company.certificados.find(c => c.tipo_certificado === certModalState.tipo)}
           />
       )}
       {socioModalState.isOpen && (
@@ -288,7 +288,7 @@ const EmpresaDetalhes: React.FC = () => {
             <p className="text-gray-400 mt-1">{company.cnpj}</p>
           </div>
           <div className="flex items-center gap-4">
-            <Badge variant={company.status === 'Ativa' ? 'success' : 'neutral'}>{company.status}</Badge>
+            <Badge variant={company.status_empresa === 'Ativa' ? 'success' : 'neutral'}>{company.status_empresa}</Badge>
             <button 
               onClick={() => setIsEditModalOpen(true)}
               className="bg-gray-800/50 hover:bg-gray-700/50 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"

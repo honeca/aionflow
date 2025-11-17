@@ -166,7 +166,7 @@ export const CompanyProvider: React.FC<{ children: ReactNode }> = ({ children })
             .from('certificados')
             .select('id')
             .eq('empresa_id', certificadoData.empresa_id)
-            .eq('tipo', certificadoData.tipo)
+            .eq('tipo_certificado', certificadoData.tipo_certificado)
             .single();
 
         if (fetchError && fetchError.code !== 'PGRST116') throw fetchError; // Ignore "0 rows" error

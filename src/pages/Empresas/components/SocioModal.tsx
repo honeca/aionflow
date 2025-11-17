@@ -25,9 +25,8 @@ const getInitialFormData = (companyId: string): FormData => ({
     data_entrada: '',
     status: 'Ativo',
     valor_integralizado: 0,
-    participacao: 0,
-    empresa_id: companyId,
-    funcao: ''
+    participacao_percentual: 0,
+    empresa_id: companyId
 });
 
 const SocioModal: React.FC<SocioModalProps> = ({ isOpen, onClose, companyId, capitalSocial, socioToEdit }) => {
@@ -47,14 +46,14 @@ const SocioModal: React.FC<SocioModalProps> = ({ isOpen, onClose, companyId, cap
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     let { name, value } = e.target;
-    
+
     if (name === 'valor_integralizado') {
         const valor = parseFloat(value) || 0;
-        const participacao = capitalSocial > 0 ? (valor / capitalSocial) * 100 : 0;
-        setFormData(prev => ({ ...prev, valor_integralizado: valor, participacao }));
+        const participacao_percentual = capitalSocial > 0 ? (valor / capitalSocial) * 100 : 0;
+        setFormData(prev => ({ ...prev, valor_integralizado: valor, participacao_percentual }));
         return;
     }
-    
+
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -83,27 +82,26 @@ const SocioModal: React.FC<SocioModalProps> = ({ isOpen, onClose, companyId, cap
             <div><label className={labelClasses}>Nome*</label><input name="nome" value={formData.nome || ''} onChange={handleChange} className={inputClasses} required /></div>
             <div><label className={labelClasses}>CPF*</label><InputMask mask="cpf" name="cpf" value={formData.cpf || ''} onChange={handleChange} className={inputClasses} required /></div>
             <div><label className={labelClasses}>Data de Entrada*</label><input type="date" name="data_entrada" value={formData.data_entrada || ''} onChange={handleChange} className={inputClasses} required /></div>
-            <div><label className={labelClasses}>Função</label><input name="funcao" value={formData.funcao || ''} onChange={handleChange} className={inputClasses} /></div>
             <div><label className={labelClasses}>Status*</label><select name="status" value={formData.status || 'Ativo'} onChange={handleChange} className={inputClasses}><option>Ativo</option><option>Inativo</option></select></div>
             <div>
                 <label className={labelClasses}>Valor Integralizado (R$)*</label>
-                <input 
-                    type="number" 
-                    step="0.01" 
-                    name="valor_integralizado" 
-                    value={formData.valor_integralizado || 0} 
-                    onChange={handleChange} 
-                    className={inputClasses} 
-                    required 
+                <input
+                    type="number"
+                    step="0.01"
+                    name="valor_integralizado"
+                    value={formData.valor_integralizado || 0}
+                    onChange={handleChange}
+                    className={inputClasses}
+                    required
                 />
             </div>
             <div>
                 <label className={labelClasses}>Participação (%)</label>
-                <input 
-                    type="text" 
-                    value={`${(formData.participacao || 0).toFixed(2)}%`} 
-                    className={`${inputClasses} bg-gray-900/50 cursor-not-allowed`} 
-                    readOnly 
+                <input
+                    type="text"
+                    value={`${(formData.participacao_percentual || 0).toFixed(2)}%`}
+                    className={`${inputClasses} bg-gray-900/50 cursor-not-allowed`}
+                    readOnly
                 />
             </div>
         </div>

@@ -26,7 +26,7 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, co
 
   useEffect(() => {
     if (isOpen) {
-      setFormData(currentCert || { tipo: certificateType, status: 'Válido', empresa_id: companyId });
+      setFormData(currentCert || { tipo_certificado: certificateType, status: 'Válido', empresa_id: companyId });
     }
   }, [isOpen, currentCert, certificateType, companyId]);
 
@@ -47,7 +47,7 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, co
       return;
     }
     
-    if (!formData.senha) {
+    if (!formData.senha_armazenada) {
       showToast('A senha do certificado é obrigatória.', 'error');
       return;
     }
@@ -82,13 +82,13 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, co
         </div>
         <div className="relative">
           <label className={labelClasses}>Senha do Certificado*</label>
-          <input 
+          <input
             type={showPassword ? 'text' : 'password'}
-            name="senha"
-            value={formData.senha || ''}
+            name="senha_armazenada"
+            value={formData.senha_armazenada || ''}
             onChange={handleChange}
-            className={inputClasses} 
-            required 
+            className={inputClasses}
+            required
           />
           <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-8 text-gray-400 hover:text-white">
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

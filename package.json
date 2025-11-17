@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "lint:dualite": "eslint --config eslint.dualite.config.js .",
     "tsc:dualite": "yarn tsc -p tsconfig.dualite.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate": "node scripts/run-migrations.js",
+    "migrate:help": "cat MIGRATIONS.md"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1",

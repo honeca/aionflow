@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="PodControl"><link rel="apple-touch-icon" href="icon.svg"><link rel="manifest" href="manifest.json">
+<title>PodControl</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;color:#111827}
+header{position:sticky;top:0;background:#f5f7fbeF;backdrop-filter:blur(10px);padding:18px 15px 10px;z-index:3}h1{margin:0;font-size:25px}.muted{color:#6b7280;font-size:12px}
+main{max-width:760px;margin:auto;padding:8px 14px 95px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:17px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px #00000008}
+.metric b{display:block;font-size:20px;margin-top:5px}.metric span{font-size:12px;color:#6b7280}.page{display:none}.page.active{display:block}
+input{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:11px;font-size:16px;margin:5px 0 10px}label{font-size:12px;font-weight:650;color:#4b5563}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+button{cursor:pointer}.primary{width:100%;padding:13px;border:0;border-radius:12px;background:#111827;color:white;font-weight:700;font-size:15px}.secondary{padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:650}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:repeat(5,1fr);padding:7px 3px calc(7px + env(safe-area-inset-bottom));z-index:5}
+nav button{border:0;background:none;font-size:11px;color:#6b7280;padding:7px 0}nav .active{color:#111827;font-weight:800}.product{display:flex;justify-content:space-between;gap:8px;align-items:center}.actions{display:flex;gap:6px;margin-top:8px}.notice{background:#fff7ed;color:#9a3412;padding:10px;border-radius:10px;font-size:12px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}td{padding:8px 4px;border-bottom:1px solid #e5e7eb}
+</style></head><body>
+<header><h1>PodControl</h1><div class="muted">Preço, estoque e lucro</div></header>
+<main>
+<section id="home" class="page active"><div class="grid">
+<div class="card metric"><span>Investido em estoque</span><b id="mCost">R$ 0</b></div>
+<div class="card metric"><span>Potencial varejo</span><b id="mRetail">R$ 0</b></div>
+<div class="card metric"><span>Lucro potencial</span><b id="mProfit">R$ 0</b></div>
+<div class="card metric"><span>Unidades</span><b id="mUnits">0</b></div></div>
+<div id="low"></div><div class="card"><b>Resumo</b><p id="summary" class="muted"></p></div></section>
+
+<section id="products" class="page"><div class="card"><button class="primary" onclick="newProduct()">+ Cadastrar produto</button></div><div id="productList"></div></section>
+
+<section id="calc" class="page"><div class="card"><b>Simulador de compra</b><p class="muted">Teste o lote antes de investir.</p>
+<div class="row"><div><label>US$ unitário</label><input id="cUsd" type="number" step=".01"></div><div><label>Quantidade</label><input id="cQty" type="number" value="1"></div></div>
+<div class="row"><div><label>Cotação</label><input id="cFx" type="number" step=".01"></div><div><label>Frete/seguro %</label><input id="cFreight" type="number"></div></div>
+<label>Custos adicionais do lote (R$)</label><input id="cExtra" type="number" value="0">
+<div class="row"><div><label>Markup %</label><input id="cMarkup" type="number" value="40"></div><div><label>Margem real %</label><input id="cMargin" type="number" value="30"></div></div>
+<button class="primary" onclick="simulate()">Calcular</button></div><div id="simResult"></div></section>
+
+<section id="history" class="page"><div id="historyList"></div></section>
+
+<section id="settings" class="page"><div class="card"><b>Configurações</b><p class="muted">Padrões do sistema.</p>
+<label>Frete/seguro padrão %</label><input id="sFreight" type="number">
+<label>Atacado a partir de</label><input id="sWholesale" type="number">
+<label>Atacadão a partir de</label><input id="sBulk" type="number">
+<label>Cotação padrão</label><input id="sFx" type="number" step=".01">
+<button class="primary" onclick="saveSettings()">Salvar</button></div>
+<div class="card"><b>Backup manual</b><p class="muted">Exporte seus dados antes de trocar ou restaurar o iPhone.</p>
+<div class="actions"><button class="secondary" onclick="exportData()">Exportar</button><button class="secondary" onclick="document.getElementById('imp').click()">Importar</button></div>
+<input id="imp" type="file" accept=".json" style="display:none" onchange="importData(event)"></div></section>
+
+<section id="form" class="page"><div class="card"><b id="formTitle">Novo produto</b>
+<input id="pId" type="hidden"><label>Produto</label><input id="pName" placeholder="Ex.: Ignite V80">
+<div class="row"><div><label>US$ unitário</label><input id="pUsd" type="number" step=".01"></div><div><label>Cotação</label><input id="pFx" type="number" step=".01"></div></div>
+<div class="row"><div><label>Frete/seguro %</label><input id="pFreight" type="number"></div><div><label>Custo adicional/un. R$</label><input id="pExtra" type="number" value="0"></div></div>
+<div class="row"><div><label>Estoque</label><input id="pStock" type="number" value="0"></div><div><label>Estoque mínimo</label><input id="pMin" type="number" value="5"></div></div>
+<div class="row"><div><label>Varejo R$</label><input id="pRetail" type="number"></div><div><label>Atacado R$</label><input id="pWholesale" type="number"></div></div>
+<label>Atacadão R$</label><input id="pBulk" type="number">
+<button class="primary" onclick="saveProduct()">Salvar produto</button><button class="secondary" style="width:100%;margin-top:8px" onclick="show('products')">Cancelar</button></div></section>
+</main>
+<nav><button data-p="home" class="active" onclick="show('home')">Início</button><button data-p="products" onclick="show('products')">Produtos</button><button data-p="calc" onclick="show('calc')">Simular</button><button data-p="history" onclick="show('history')">Histórico</button><button data-p="settings" onclick="show('settings')">Ajustes</button></nav>
+<script>
+const $=id=>document.getElementById(id), brl=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}), now=()=>new Date().toLocaleString('pt-BR');
+let db=JSON.parse(localStorage.getItem('podcontrol')||'null')||{products:[],moves:[],settings:{freight:30,wholesale:5,bulk:10,fx:5.5}};
+function persist(){localStorage.setItem('podcontrol',JSON.stringify(db));render()}
+function cost(p){return (+p.usd*+p.fx)*(1+(+p.freight/100))+(+p.extra||0)}
+function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.p===id));if(id==='history')history()}
+function newProduct(){show('form');$('formTitle').textContent='Novo produto';['pId','pName','pUsd','pRetail','pWholesale','pBulk'].forEach(i=>$(i).value='');$('pFx').value=db.settings.fx;$('pFreight').value=db.settings.freight;$('pExtra').value=0;$('pStock').value=0;$('pMin').value=5}
+function saveProduct(){let id=$('pId').value||String(Date.now()),old=db.products.find(x=>x.id===id),p={id,name:$('pName').value.trim(),usd:+$('pUsd').value,fx:+$('pFx').value,freight:+$('pFreight').value,extra:+$('pExtra').value,stock:+$('pStock').value,min:+$('pMin').value,retail:+$('pRetail').value,wholesale:+$('pWholesale').value,bulk:+$('pBulk').value};if(!p.name||!p.usd||!p.fx)return alert('Informe produto, valor em US$ e cotação.');if(old)Object.assign(old,p);else{db.products.push(p);if(p.stock)db.moves.unshift({date:now(),product:p.name,type:'Entrada inicial',qty:p.stock})}persist();show('products')}
+function edit(id){let p=db.products.find(x=>x.id===id);newProduct();$('formTitle').textContent='Editar produto';for(let k of ['Id','Name','Usd','Fx','Freight','Extra','Stock','Min','Retail','Wholesale','Bulk'])$('p'+k).value=p[k.toLowerCase()]}
+function move(id,dir){let p=db.products.find(x=>x.id===id),q=+prompt(dir>0?'Quantidade de entrada:':'Quantidade da baixa:','1');if(!q||q<0)return;if(dir<0&&q>p.stock)return alert('Estoque insuficiente.');p.stock+=dir*q;db.moves.unshift({date:now(),product:p.name,type:dir>0?'Entrada':'Baixa',qty:q});persist()}
+function products(){$('productList').innerHTML=db.products.length?'':'<div class="card muted">Nenhum produto cadastrado.</div>';db.products.forEach(p=>{let c=cost(p),mg=p.retail?(p.retail-c)/p.retail*100:0;$('productList').innerHTML+=`<div class="card product"><div><b>${p.name}</b><div class="muted">Estoque ${p.stock} • custo ${brl(c)}<br>varejo ${brl(p.retail)} • margem ${mg.toFixed(1)}%</div></div><div class="actions"><button class="secondary" onclick="move('${p.id}',-1)">−</button><button class="secondary" onclick="move('${p.id}',1)">+</button><button class="secondary" onclick="edit('${p.id}')">Editar</button></div></div>`})}
+function home(){let tc=0,tr=0,u=0;db.products.forEach(p=>{tc+=cost(p)*p.stock;tr+=p.retail*p.stock;u+=p.stock});$('mCost').textContent=brl(tc);$('mRetail').textContent=brl(tr);$('mProfit').textContent=brl(tr-tc);$('mUnits').textContent=u;let lows=db.products.filter(p=>p.stock<=p.min);$('low').innerHTML=lows.length?`<div class="notice"><b>Estoque baixo:</b> ${lows.map(p=>p.name+' ('+p.stock+')').join(', ')}</div>`:'';$('summary').textContent=db.products.length?`${db.products.length} produtos • margem potencial ${tr?((tr-tc)/tr*100).toFixed(1):0}%`:'Cadastre o primeiro produto.'}
+function history(){$('historyList').innerHTML=db.moves.length?'':'<div class="card muted">Sem movimentações.</div>';db.moves.slice(0,100).forEach(m=>$('historyList').innerHTML+=`<div class="card"><b>${m.type}: ${m.product}</b><div class="muted">${m.qty} un. • ${m.date}</div></div>`)}
+function simulate(){let usd=+$('cUsd').value,q=+$('cQty').value,fx=+$('cFx').value,fr=+$('cFreight').value,ex=+$('cExtra').value,mk=+$('cMarkup').value,mg=+$('cMargin').value,g=usd*fx*q,f=g*fr/100,t=g+f+ex,u=t/(q||1),pm=u*(1+mk/100),pr=u/(1-mg/100);$('simResult').innerHTML=`<div class="card"><b>Resultado</b><table><tr><td>Mercadoria</td><td>${brl(g)}</td></tr><tr><td>Frete/seguro</td><td>${brl(f)}</td></tr><tr><td>Investimento</td><td><b>${brl(t)}</b></td></tr><tr><td>Custo unitário</td><td>${brl(u)}</td></tr><tr><td>Preço por markup ${mk}%</td><td>${brl(pm)}</td></tr><tr><td>Preço p/ margem real ${mg}%</td><td>${brl(pr)}</td></tr></table></div>`}
+function saveSettings(){db.settings={freight:+$('sFreight').value,wholesale:+$('sWholesale').value,bulk:+$('sBulk').value,fx:+$('sFx').value};persist();alert('Salvo.')}
+function loadSettings(){$('sFreight').value=db.settings.freight;$('sWholesale').value=db.settings.wholesale;$('sBulk').value=db.settings.bulk;$('sFx').value=db.settings.fx;$('cFreight').value=db.settings.freight;$('cFx').value=db.settings.fx}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='podcontrol-backup.json';a.click()}
+function importData(e){let f=e.target.files[0];if(!f)return,r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);persist();loadSettings();alert('Backup importado.')}catch(e){alert('Backup inválido.')}};r.readAsText(f)}
+function render(){home();products()}loadSettings();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+</script></body></html>
